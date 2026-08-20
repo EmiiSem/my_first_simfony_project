@@ -1,4 +1,4 @@
-{% extends 'base.html.twig' %}
+{% extends 'layout.html.twig' %}
 
 {% block title %}Blog index{% endblock %}
 
@@ -35,5 +35,5 @@
         </tbody>
     </table>
 
-    <a href="{{ path('app_blog_new') }}">Create new</a>
+    <a href="{{ path('app_blog_new') }}" class="btn btn-success">Create new</a>
 {% endblock %}
