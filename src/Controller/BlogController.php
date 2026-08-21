@@ -13,7 +13,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 
-#[Route('/blog')]
+#[Route('/admin/blog')]
 final class BlogController extends AbstractController
 {
     #[Route(name: 'app_blog_index', methods: ['GET'])]
