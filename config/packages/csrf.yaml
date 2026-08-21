@@ -5,7 +5,7 @@ framework:
             token_id: submit
 
     csrf_protection:
+        # authenticate/logout — через сессию: layout без Stimulus/importmap,
+        # а stateless CSRF для login требует JS (csrf-protection controller)
         stateless_token_ids:
             - submit
-            - authenticate
-            - logout
