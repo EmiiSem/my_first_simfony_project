@@ -9,7 +9,7 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Form\DataTransformerInterface;
 
-class TagTransformer implements DataTransformerInterface
+readonly class TagTransformer implements DataTransformerInterface
 {
     public function __construct(
         private EntityManagerInterface $entityManager,
@@ -18,16 +18,16 @@ class TagTransformer implements DataTransformerInterface
     }
 
     /**
-     * @param Collection<int, Tag>|null $tags
+     * @param Collection<int, Tag>|null $value
      */
-    public function transform($tags): string
+    public function transform($value): string
     {
-        if (null === $tags || $tags->isEmpty()) {
+        if (null === $value || $value->isEmpty()) {
             return '';
         }
 
         $names = [];
-        foreach ($tags as $tag) {
+        foreach ($value as $tag) {
             $names[] = $tag->getName();
         }
 
@@ -37,20 +37,22 @@ class TagTransformer implements DataTransformerInterface
     /**
      * @return Collection<int, Tag>
      */
-    public function reverseTransform($tagString): Collection
+    public function reverseTransform($value): Collection
     {
-        if (!$tagString) {
+        if (!$value) {
             return new ArrayCollection();
         }
 
-        $names = array_unique(array_filter(array_map('trim', explode(',', (string) $tagString))));
+        $items = array_unique(array_filter(array_map('trim', explode(',', $value))));
         $tags = new ArrayCollection();
 
-        foreach ($names as $name) {
-            $tag = $this->tagRepository->findOneBy(['name' => $name]);
+        foreach ($items as $item) {
+            // findBy() возвращает массив, findOneBy() - один объект или null
+            $tag = $this->tagRepository->findOneBy(['name' => $item]);
 
             if (!$tag) {
-                $tag = (new Tag())->setName($name);
+                $tag = (new Tag())->setName($item);
+                // без persist Doctrine не сохранит Tag и id останется null
                 $this->entityManager->persist($tag);
             }
 
