@@ -3,6 +3,8 @@
 namespace App\Controller;
 
 use App\Entity\Blog;
+use App\Filter\BlogFilter;
+use App\Form\BlogFilterType;
 use App\Form\BlogType;
 use App\Repository\BlogRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -15,10 +17,16 @@ use Symfony\Component\Routing\Attribute\Route;
 final class BlogController extends AbstractController
 {
     #[Route(name: 'app_blog_index', methods: ['GET'])]
-    public function index(BlogRepository $blogRepository): Response
+    public function index(Request $request, BlogRepository $blogRepository): Response
     {
+        $blogFilter = new BlogFilter();
+
+        $form = $this->createForm(BlogFilterType::class, $blogFilter);
+        $form->handleRequest($request);
+
         return $this->render('blog/index.html.twig', [
-            'blogs' => $blogRepository->findAll(),
+            'blogs' => $blogRepository->findByBlogFilter($blogFilter),
+            'searchForm' => $form->createView(),
         ]);
     }
 
