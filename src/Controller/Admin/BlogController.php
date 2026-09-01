@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Controller;
+namespace App\Controller\Admin;
 
 use App\Entity\Blog;
 use App\Filter\BlogFilter;
@@ -33,7 +33,7 @@ final class BlogController extends AbstractController
     #[Route('/new', name: 'app_blog_new', methods: ['GET', 'POST'])]
     public function new(Request $request, EntityManagerInterface $entityManager): Response
     {
-        $blog = new Blog();
+        $blog = new Blog($this->getUser());
         $form = $this->createForm(BlogType::class, $blog);
         $form->handleRequest($request);
 
