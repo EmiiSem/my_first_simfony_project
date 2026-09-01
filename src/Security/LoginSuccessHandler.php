@@ -22,6 +22,8 @@ class LoginSuccessHandler implements AuthenticationSuccessHandlerInterface
     {
         if ($this->authorizationChecker->isGranted('ROLE_ADMIN')) {
             return new RedirectResponse($this->urlGenerator->generate('app_blog_index'));
+        } else {
+            return new RedirectResponse($this->urlGenerator->generate('app_login_redirect'));
         }
 
         $request->getSession()->getFlashBag()->add('warning', 'Недостаточно прав');
