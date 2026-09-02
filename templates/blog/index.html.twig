@@ -16,6 +16,7 @@
         <thead>
             <tr>
                 <th>Id</th>
+                <th>Owner</th>
                 <th>Title</th>
                 <th>Description</th>
                 <th>Text</th>
@@ -26,6 +27,7 @@
         {% for blog in blogs %}
             <tr>
                 <td>{{ blog.id }}</td>
+                <td>{% if blog.user %}  {{ blog.user.email }} {% endif %}</td>
                 <td>{{ blog.title }}</td>
                 <td>{{ blog.description | length > 50 ? blog.description | slice(0, 50) ~ '...' : blog.description }}</td>
                 <td>{{ blog.text | length > 50 ? blog.text | slice(0, 50) ~ '...' : blog.text }}</td>
