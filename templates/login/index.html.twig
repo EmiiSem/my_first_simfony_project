@@ -1,6 +1,8 @@
 {% extends 'layout.html.twig' %}
 
 {% block body %}
+    {% block title %}<h1>Login</h1>{% endblock %}
+
     {% for message in app.flashes('warning') %}
         <div class="alert alert-warning">{{ message }}</div>
     {% endfor %}
@@ -12,12 +14,12 @@
     <form action="{{ path('app_login') }}" method="post">
         <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
         <label for="username">Email:</label>
-        <input type="text" id="username" name="_username" value="{{ last_username }}" required>
+        <input type="text" id="username" name="_username" value="{{ last_username }}" required class="form-control">
 
         <label for="password">Password:</label>
-        <input type="password" id="password" name="_password" required>
+        <input type="password" id="password" name="_password" required class="form-control">
 
-        <button type="submit">login</button>
+        <button type="submit" class="btn btn-primary mt-3">login</button>
     </form>
-    <a href="{{ url('app_register') }}">Регистрация</a>
+    <a class="btn btn-success mt-3" href="{{ url('app_register') }}">Регистрация</a>
 {% endblock %}
