@@ -20,14 +20,16 @@ class ContentWatchApi
                 'text' => $text,
                 'test' => 1
             ],
-            CURLOPT_TIMEOUT => 10,          // Максимальное время выполнения запроса
-            CURLOPT_CONNECTTIMEOUT => 5,    // Время ожидания подключения
+            CURLOPT_TIMEOUT => 10,
+            CURLOPT_CONNECTTIMEOUT => 5,
             CURLOPT_SSL_VERIFYPEER => false,
             CURLOPT_SSL_VERIFYHOST => false,
         ]);
 
         $response = curl_exec($curl);
         $error = curl_error($curl);
+
+        // curl_close удален для совместимости с PHP 8.5+
 
         if ($error) {
             throw new \RuntimeException('cURL error: ' . $error);
@@ -39,11 +41,11 @@ class ContentWatchApi
             throw new \RuntimeException('JSON decode error: ' . json_last_error_msg());
         }
 
-        // Проверка на наличие ошибок со стороны API (иногда они возвращают поле 'error')
-        if (isset($data['error'])) {
-            throw new \RuntimeException('API Error: ' . $data['error']);
+        if (!empty($data['error']) || !isset($data['percent'])) {
+            $errorMsg = $data['error'] ?? 'Unknown API error';
+            throw new \RuntimeException('API Error: ' . $errorMsg . '. Response: ' . print_r($data, true));
         }
 
-        return (int) ($data['percent'] ?? 0);
+        return (int) $data['percent'];
     }
 }
