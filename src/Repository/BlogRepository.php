@@ -18,6 +18,9 @@ class BlogRepository extends ServiceEntityRepository
         parent::__construct($registry, Blog::class);
     }
 
+    /**
+     * @return array<Blog>
+    */
     public function getBlogs(): array
     {
         return $this
