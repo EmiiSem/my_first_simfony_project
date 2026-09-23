@@ -25,6 +25,10 @@ services:
         arguments:
             $key: '%env(API_KEY)%'
 
+    App\Service\NewsGrabber:
+        arguments:
+            $sslCertFile: '%env(SSL_CERT_FILE)%'
+
 
 knp_paginator:
     convert_exception: false
