@@ -57,8 +57,8 @@ class Blog
     #[ORM\Column(type: Types::STRING)]
     private ?string $status = null;
 
-    #[ORM\Column(type: Types::DATETIME_MUTABLE)]
-    private ?DateTime $blockedAt;
+    #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
+    private ?DateTime $blockedAt = null;
 
     #[ORM\PreUpdate]
     public function setBlockedAtValue(): void
