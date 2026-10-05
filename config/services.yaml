@@ -7,6 +7,12 @@
 # Put parameters here that don't need to change on each machine where the app is deployed
 # https://symfony.com/doc/current/best_practices.html#use-parameters-for-application-configuration
 parameters:
+    autoblog: 240
+
+when@test:
+    parameters:
+        # после ResetDatabase первый созданный User обычно получает id=1
+        autoblog: 1
 
 services:
     # default configuration for services in *this* file
