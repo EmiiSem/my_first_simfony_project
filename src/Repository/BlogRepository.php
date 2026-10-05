@@ -31,6 +31,11 @@ class BlogRepository extends ServiceEntityRepository
             ->getResult();
     }
 
+    public function getByTitle(string $title): ?Blog
+    {
+        return $this->findOneBy(['title' => $title]);
+    }
+
     public function findByBlogFilter(BlogFilter $blogFilter): QueryBuilder
     {
         $blogs = $this->createQueryBuilder('b')
