@@ -4,6 +4,15 @@
     <div class="row">
         <h3>{{ blog.title }}</h3>
         <p>{{ blog.text }}</p>
+
+        {% for comment in blog.comments %}
+            <p>Комментарий: {{ comment.id}} - {{ comment.text }}</p>
+        {% endfor %}
+
+        {{ form_start(form) }}
+        {{ form_widget(form) }}
+        <button class="btn btn-primary">{{ button_label|default('Save') }}</button>
+        {{ form_end(form) }}
     </div>
 
 {% endblock %}
