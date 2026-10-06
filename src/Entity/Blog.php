@@ -53,12 +53,17 @@ class Blog
     #[ORM\Column(type: Types::SMALLINT, nullable: true)]
     private ?int $percent = null;
 
-    #[Assert\NotBlank]
     #[ORM\Column(type: Types::STRING)]
     private ?string $status = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
     private ?DateTime $blockedAt = null;
+
+    /**
+     * @var Collection<int, Comment>
+     */
+    #[ORM\OneToMany(targetEntity: Comment::class, mappedBy: 'blog', orphanRemoval: true)]
+    private Collection $comments;
 
     #[ORM\PreUpdate]
     public function setBlockedAtValue(): void
@@ -70,8 +75,10 @@ class Blog
 
     public function __construct(?User $user = null)
     {
+        $this->status = 'pending';
         $this->tags = new ArrayCollection();
         $this->user = $user;
+        $this->comments = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -213,6 +220,35 @@ class Blog
     public function setBlockedAt(?DateTime $blockedAt): static
     {
         $this->blockedAt = $blockedAt;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Comment>
+     */
+    public function getComments(): Collection
+    {
+        return $this->comments;
+    }
+
+    public function addComment(Comment $comment): static
+    {
+        if (!$this->comments->contains($comment)) {
+            $this->comments->add($comment);
+            $comment->setBlog($this);
+        }
+
+        return $this;
+    }
+
+    public function removeComment(Comment $comment): static
+    {
+        if ($this->comments->removeElement($comment)) {
+            if ($comment->getBlog() === $this) {
+                $comment->setBlog(null);
+            }
+        }
 
         return $this;
     }
